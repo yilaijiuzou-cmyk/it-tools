@@ -155,6 +155,7 @@ const tools = computed<ToolCategory[]>(() => [
 
   :deep(.n-layout-scroll-container) {
     padding: 0 !important;
+    height: 100% !important;
   }
 }
 
@@ -213,5 +214,11 @@ const tools = computed<ToolCategory[]>(() => [
       text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
     }
   }
+}
+</style>
+
+<style lang="less">
+.home-content .n-layout-scroll-container {
+  padding: 0 !important;
 }
 </style>
