@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { NIcon, useThemeVars } from 'naive-ui';
 
-import { RouterLink } from 'vue-router';
+import { RouterLink, useRoute } from 'vue-router';
 import { Home2, Menu2 } from '@vicons/tabler';
 
 import { storeToRefs } from 'pinia';
@@ -16,6 +16,8 @@ import CollapsibleToolMenu from '@/components/CollapsibleToolMenu.vue';
 
 const themeVars = useThemeVars();
 const styleStore = useStyleStore();
+const route = useRoute();
+const isHome = computed(() => route.path === '/');
 const version = config.app.version;
 const commitSha = config.app.lastCommitSha.slice(0, 7);
 
@@ -24,6 +26,12 @@ const { t } = useI18n();
 
 const toolStore = useToolStore();
 const { favoriteTools, toolsByCategory } = storeToRefs(toolStore);
+
+watch(isHome, (home) => {
+  if (home) {
+    styleStore.isMenuCollapsed = true;
+  }
+}, { immediate: true });
 
 const tools = computed<ToolCategory[]>(() => [
   ...(favoriteTools.value.length > 0 ? [{ name: t('tools.categories.favorite-tools'), components: favoriteTools.value }] : []),
@@ -34,7 +42,7 @@ const tools = computed<ToolCategory[]>(() => [
 <template>
   <MenuLayout class="menu-layout" :class="{ isSmallScreen: styleStore.isSmallScreen }">
     <template #sider>
-      <RouterLink to="/" class="hero-wrapper">
+      <RouterLink v-if="!isHome" to="/" class="hero-wrapper">
         <img src="/hero-bg.jpg" alt="hero background" class="hero-bg" />
         <div class="hero-overlay" />
         <div class="text-wrapper">
@@ -48,7 +56,7 @@ const tools = computed<ToolCategory[]>(() => [
         </div>
       </RouterLink>
 
-      <div class="sider-content">
+      <div v-if="!isHome" class="sider-content">
         <div v-if="styleStore.isSmallScreen" flex flex-col items-center>
           <locale-selector w="90%" />
 
@@ -91,7 +99,7 @@ const tools = computed<ToolCategory[]>(() => [
     </template>
 
     <template #content>
-      <div flex items-center justify-center gap-2>
+      <div v-if="!isHome" flex items-center justify-center gap-2>
         <c-button
           circle
           variant="text"
@@ -121,7 +129,9 @@ const tools = computed<ToolCategory[]>(() => [
           <NavbarButtons />
         </div>
       </div>
-      <slot />
+      <div :class="{ 'home-content': isHome }">
+        <slot />
+      </div>
     </template>
   </MenuLayout>
 </template>
@@ -137,6 +147,15 @@ const tools = computed<ToolCategory[]>(() => [
 .sider-content {
   padding-top: 160px;
   padding-bottom: 200px;
+}
+
+.home-content {
+  padding: 0 !important;
+  height: 100%;
+
+  :deep(.n-layout-scroll-container) {
+    padding: 0 !important;
+  }
 }
 
 .hero-wrapper {
