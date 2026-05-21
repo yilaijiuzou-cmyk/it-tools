@@ -27,6 +27,13 @@ export const config = figue({
       default: 'development',
       env: 'VITE_VERCEL_ENV',
     },
+    siteMode: {
+      doc: 'Site deployment mode: home (landing page) or tools (full app)',
+      format: 'enum',
+      values: ['home', 'tools'],
+      default: 'home',
+      env: 'VITE_SITE_MODE',
+    },
   },
   plausible: {
     isTrackerEnabled: {

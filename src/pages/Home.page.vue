@@ -1,29 +1,45 @@
 <script setup lang="ts">
+import { IconDragDrop } from '@tabler/icons-vue';
 import { useHead } from '@vueuse/head';
+import { computed } from 'vue';
+import Draggable from 'vuedraggable';
+import ToolCard from '../components/ToolCard.vue';
+import { useToolStore } from '@/tools/tools.store';
+import { config } from '@/config';
 
-useHead({ title: '一六工具箱 - 开发者的效率利器' });
+const toolStore = useToolStore();
+const isLandingSite = computed(() => config.app.siteMode === 'home');
+
+useHead({ title: isLandingSite.value ? '一六工具箱 - 高效便捷，触手可及' : '一六工具箱 - 开发者的效率利器' });
+const { t } = useI18n();
+
+const favoriteTools = computed(() => toolStore.favoriteTools);
+
+function onUpdateFavoriteTools() {
+  toolStore.updateFavoriteTools(favoriteTools.value);
+}
 </script>
 
 <template>
-  <div class="landing">
+  <div v-if="isLandingSite" class="landing">
     <section class="hero">
       <div class="hero-bg" />
       <div class="hero-overlay" />
       <div class="hero-content">
         <h1 class="hero-title">一六工具箱</h1>
         <div class="hero-line" />
-        <p class="hero-slogan">让每一行代码，都事半功倍</p>
+        <p class="hero-slogan">{{ $t('home.subtitle') }}</p>
       </div>
     </section>
 
     <section class="tools-section">
       <div class="tools-grid">
-        <div class="tool-banner">
+        <a href="https://tools.yilaijiuzou.com" target="_blank" class="tool-banner banner-link">
           <div class="banner-number">01</div>
           <div class="banner-icon">&#9702;</div>
           <h3 class="banner-title">常用工具</h3>
-          <p class="banner-desc">常用开发工具集合</p>
-        </div>
+          <p class="banner-desc">日常开发工具集合</p>
+        </a>
         <div class="tool-banner">
           <div class="banner-number">02</div>
           <div class="banner-icon">&#9702;</div>
@@ -38,6 +54,48 @@ useHead({ title: '一六工具箱 - 开发者的效率利器' });
         </div>
       </div>
     </section>
+  </div>
+
+  <div v-else class="pt-50px">
+    <div class="grid-wrapper">
+      <transition name="height">
+        <div v-if="toolStore.favoriteTools.length > 0">
+          <h3 class="mb-5px mt-25px text-neutral-400 font-500">
+            {{ $t('home.categories.favoriteTools') }}
+            <c-tooltip :tooltip="$t('home.categories.favoritesDndToolTip')">
+              <n-icon :component="IconDragDrop" size="18" />
+            </c-tooltip>
+          </h3>
+          <Draggable
+            :list="favoriteTools"
+            class="grid grid-cols-1 gap-12px lg:grid-cols-3 md:grid-cols-3 sm:grid-cols-2 xl:grid-cols-4"
+            ghost-class="ghost-favorites-draggable"
+            item-key="name"
+            @end="onUpdateFavoriteTools"
+          >
+            <template #item="{ element: tool }">
+              <ToolCard :tool="tool" />
+            </template>
+          </Draggable>
+        </div>
+      </transition>
+
+      <div v-if="toolStore.newTools.length > 0">
+        <h3 class="mb-5px mt-25px text-neutral-400 font-500">
+          {{ t('home.categories.newestTools') }}
+        </h3>
+        <div class="grid grid-cols-1 gap-12px lg:grid-cols-3 md:grid-cols-3 sm:grid-cols-2 xl:grid-cols-4">
+          <ToolCard v-for="tool in toolStore.newTools" :key="tool.name" :tool="tool" />
+        </div>
+      </div>
+
+      <h3 class="mb-5px mt-25px text-neutral-400 font-500">
+        {{ $t('home.categories.allTools') }}
+      </h3>
+      <div class="grid grid-cols-1 gap-12px lg:grid-cols-3 md:grid-cols-3 sm:grid-cols-2 xl:grid-cols-4">
+        <ToolCard v-for="tool in toolStore.tools" :key="tool.name" :tool="tool" />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -131,11 +189,23 @@ useHead({ title: '一六工具箱 - 开发者的效率利器' });
   border-radius: 12px;
   padding: 40px 20px;
   text-align: center;
-  transition: border-color 0.3s ease;
+  transition: border-color 0.3s ease, background 0.3s ease;
   cursor: default;
+  text-decoration: none;
+  display: block;
+  color: inherit;
 
   &:hover {
     border-color: rgba(255, 255, 255, 0.2);
+  }
+}
+
+.banner-link {
+  cursor: pointer;
+
+  &:hover {
+    border-color: rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.07);
   }
 }
 
@@ -163,5 +233,40 @@ useHead({ title: '一六工具箱 - 开发者的效率利器' });
   font-size: 14px;
   color: rgba(255, 255, 255, 0.35);
   margin: 0;
+}
+
+.height-enter-active,
+.height-leave-active {
+  transition: all 0.5s ease-in-out;
+  overflow: hidden;
+  max-height: 500px;
+}
+
+.height-enter-from,
+.height-leave-to {
+  max-height: 42px;
+  overflow: hidden;
+  opacity: 0;
+  margin-bottom: 0;
+}
+
+.ghost-favorites-draggable {
+  opacity: 0.4;
+  background-color: #ccc;
+  border: 2px dashed #666;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  transform: scale(1.1);
+  animation: ghost-favorites-draggable-animation 0.2s ease-out;
+}
+
+@keyframes ghost-favorites-draggable-animation {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
 }
 </style>

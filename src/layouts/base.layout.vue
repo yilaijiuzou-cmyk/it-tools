@@ -17,7 +17,8 @@ import CollapsibleToolMenu from '@/components/CollapsibleToolMenu.vue';
 const themeVars = useThemeVars();
 const styleStore = useStyleStore();
 const route = useRoute();
-const isHome = computed(() => route.path === '/');
+const isHome = computed(() => route.path === '/' && config.app.siteMode === 'home');
+const isLandingSite = computed(() => config.app.siteMode === 'home');
 const version = config.app.version;
 const commitSha = config.app.lastCommitSha.slice(0, 7);
 
