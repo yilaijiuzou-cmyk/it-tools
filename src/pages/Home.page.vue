@@ -35,21 +35,29 @@ function onUpdateFavoriteTools() {
     <section class="tools-section">
       <div class="tools-grid">
         <a href="https://ihgpoints.yilaijiuzou.com" target="_blank" class="tool-banner banner-link">
-          <div class="banner-number">01</div>
-          <div class="banner-icon">&#9702;</div>
-          <h3 class="banner-title">常用工具</h3>
-          <p class="banner-desc">日常开发工具集合</p>
+          <svg class="banner-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10" />
+            <path d="M8 14c1.5-2 2.5-3 4-3s2.5 1 4 3" />
+            <line x1="12" y1="7" x2="12" y2="10" />
+            <circle cx="12" cy="17" r="0.5" fill="currentColor" stroke="none" />
+          </svg>
+          <h3 class="banner-title">IHG 积分评估</h3>
+          <p class="banner-desc">积分购买价值分析计算</p>
         </a>
         <div class="tool-banner">
-          <div class="banner-number">02</div>
-          <div class="banner-icon">&#9702;</div>
-          <h3 class="banner-title">更多工具</h3>
-          <p class="banner-desc">更多实用开发工具</p>
+          <svg class="banner-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
+          </svg>
+          <h3 class="banner-title">常用工具</h3>
+          <p class="banner-desc">日常开发工具集合</p>
         </div>
         <div class="tool-banner">
-          <div class="banner-number">03</div>
-          <div class="banner-icon">&#9702;</div>
-          <h3 class="banner-title">即将上线</h3>
+          <svg class="banner-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="8" x2="12" y2="16" />
+            <line x1="8" y1="12" x2="16" y2="12" />
+          </svg>
+          <h3 class="banner-title">更多工具</h3>
           <p class="banner-desc">更多工具陆续上线</p>
         </div>
       </div>
@@ -209,17 +217,13 @@ function onUpdateFavoriteTools() {
   }
 }
 
-.banner-number {
-  font-size: 14px;
-  color: rgba(255, 255, 255, 0.3);
-  letter-spacing: 4px;
-  margin-bottom: 16px;
-}
-
 .banner-icon {
-  font-size: 32px;
-  color: rgba(255, 255, 255, 0.2);
-  margin-bottom: 16px;
+  width: 36px;
+  height: 36px;
+  margin: 0 auto 16px;
+  display: block;
+  color: rgba(255, 255, 255, 0.25);
+  transition: color 0.3s ease;
 }
 
 .banner-title {
