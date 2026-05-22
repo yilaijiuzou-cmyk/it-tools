@@ -34,7 +34,7 @@ function onUpdateFavoriteTools() {
 
     <section class="tools-section">
       <div class="tools-grid">
-        <a href="https://tools.yilaijiuzou.com" target="_blank" class="tool-banner banner-link">
+        <a href="https://ihgpoints.yilaijiuzou.com" target="_blank" class="tool-banner banner-link">
           <div class="banner-number">01</div>
           <div class="banner-icon">&#9702;</div>
           <h3 class="banner-title">常用工具</h3>
